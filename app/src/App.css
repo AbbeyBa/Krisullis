@@ -3,3 +3,9 @@
   margin: 0 auto;
   margin-top: 50px;
 }
+.c-p {
+  cursor: pointer;
+}
+.mt-5 {
+  margin-top: 5px;
+}

@@ -12,6 +12,8 @@ global.Buffer = Buffer;
 export default function Register() {
   const recaptchaRef = React.createRef();
   const [isReCaptchaLoaded, setIsReCaptchaLoaded] = useState(false)
+  const [isHidePassword, setIsHidePassword] = useState(false)
+  const [isHideConfirmPassword, setIsHideConfirmPassword] = useState(false)
   const [wallet, setWallet] = useState(null);
 
   useEffect(() => {
@@ -32,7 +34,6 @@ export default function Register() {
     setIsReCaptchaLoaded(true)
   }
   const responseGoogle = () => {
-
   }
   return (
     <div className="wrap">
@@ -40,25 +41,32 @@ export default function Register() {
       <form onSubmit={onSubmitWithReCAPTCHA}>
         <div className="flex">
           <div className="left" >
-            <div>
+            <div >
               <label>First name</label>
               <input />
             </div>
-            <div>
+            <div className="mt-5">
               <label>Last name</label>
               <input />
             </div>
-            <div>
+            <div className="mt-5">
               <label>Email</label>
-              <input />
+              <input type="email" />
             </div>
-            <div>
+            <div className="create-password mt-5">
               <label>Create Password</label>
-              <input />
+              <div style={{ "position": 'relative' }}>
+                <input type={isHidePassword ? "text" : 'password'} />
+                <i className={`fa ${isHidePassword ? "fa-eye" : "fa-eye-slash"} icon c-p`} onClick={() => setIsHidePassword(previous => !previous)} />
+              </div>
+
             </div>
-            <div>
+            <div className="confirm-password mt-5">
               <label>Confirm Password</label>
-              <input />
+              <div style={{ "position": 'relative' }}>
+                <input type={isHideConfirmPassword ? "text" : 'password'} />
+                <i className={`fa ${isHideConfirmPassword ? "fa-eye" : "fa-eye-slash"} icon c-p`} onClick={() => setIsHideConfirmPassword(previous => !previous)} />
+              </div>
             </div>
             <button className="btn-register">REGISTER</button>
             <div className="by-clicking"><p>By clicking 'Register', I agree to the</p>
