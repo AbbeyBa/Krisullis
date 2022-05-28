@@ -1,15 +1,28 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./styles.scss";
 import IconNear from '../icons/near'
 import ReCAPTCHA from "react-google-recaptcha";
 import GoogleLogin from 'react-google-login';
+import { connect, WalletConnection } from 'near-api-js';
+import { getConfig } from '../../config';
+import { Buffer } from 'buffer';
 
-
+global.Buffer = Buffer;
 
 export default function Register() {
   const recaptchaRef = React.createRef();
   const [isReCaptchaLoaded, setIsReCaptchaLoaded] = useState(false)
+  const [wallet, setWallet] = useState(null);
 
+  useEffect(() => {
+    connect(getConfig()).then((near) => setWallet(new WalletConnection(near)));
+  }, []);
+  const handleLogin = () => {
+    wallet.requestSignIn({
+      contractId: 'wrap.testnet',
+      methodNames: ['near_deposit', 'ft_balance_of', 'near_withdraw'],
+    });
+  };
   const onSubmitWithReCAPTCHA = async (e) => {
     e.preventDefault()
     if (isReCaptchaLoaded) {
@@ -57,7 +70,7 @@ export default function Register() {
           <div className="right">
             <div>
               <p className="fw-bold">Connect with below options</p>
-              <div className="ctn-near-wallet">
+              <div className="ctn-near-wallet" onClick={handleLogin}>
                 <div className="ctn-icon">
                   <span><IconNear /></span>
                 </div>
@@ -75,7 +88,7 @@ export default function Register() {
                 <ReCAPTCHA
                   size="normal"
                   ref={recaptchaRef}
-                  sitekey={process.env.REACT_APP_RECAPTCHA_SITE_ID}
+                  sitekey={process.env.REACT_APP_RECAPTCHA_SITE_ID || ''}
                   onChange={recaptchaLoaded}
                 />
               </div>
